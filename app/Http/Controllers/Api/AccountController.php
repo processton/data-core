@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Account;
+use App\Actions\Account\CreateAccountAction;
+use App\Actions\Account\DeleteAccountAction;
+use App\Actions\Account\GetAccountAction;
+use App\Actions\Account\GetAccountsAction;
+use App\Actions\Account\UpdateAccountAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -35,9 +39,9 @@ class AccountController extends ApiController
      *  ]
      * }
      */
-    public function index(): JsonResponse
+    public function index(GetAccountsAction $action): JsonResponse
     {
-        $accounts = Account::with(['usernames', 'identities'])->get();
+        $accounts = $action->execute();
 
         return $this->success($accounts, 'Accounts retrieved successfully');
     }
@@ -66,7 +70,7 @@ class AccountController extends ApiController
      *  }
      * }
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, CreateAccountAction $action): JsonResponse
     {
         try {
             $validated = $request->validate([
@@ -76,7 +80,7 @@ class AccountController extends ApiController
                 'type' => 'nullable|string|max:50',
             ]);
 
-            $account = Account::create($validated);
+            $account = $action->execute($validated);
 
             return $this->success($account, 'Account created successfully', 201);
         } catch (ValidationException $e) {
@@ -110,9 +114,9 @@ class AccountController extends ApiController
      *  "errors": null
      * }
      */
-    public function show(string $id): JsonResponse
+    public function show(string $id, GetAccountAction $action): JsonResponse
     {
-        $account = Account::with(['usernames', 'identities'])->find($id);
+        $account = $action->execute((int) $id);
 
         if (! $account) {
             return $this->error('Account not found', 404);
@@ -147,9 +151,9 @@ class AccountController extends ApiController
      *  }
      * }
      */
-    public function update(Request $request, string $id): JsonResponse
+    public function update(Request $request, string $id, GetAccountAction $getAction, UpdateAccountAction $updateAction): JsonResponse
     {
-        $account = Account::find($id);
+        $account = $getAction->execute((int) $id);
 
         if (! $account) {
             return $this->error('Account not found', 404);
@@ -163,7 +167,7 @@ class AccountController extends ApiController
                 'type' => 'nullable|string|max:50',
             ]);
 
-            $account->update($validated);
+            $account = $updateAction->execute($account, $validated);
 
             return $this->success($account, 'Account updated successfully');
         } catch (ValidationException $e) {
@@ -184,15 +188,15 @@ class AccountController extends ApiController
      *  "data": null
      * }
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(string $id, GetAccountAction $getAction, DeleteAccountAction $deleteAction): JsonResponse
     {
-        $account = Account::find($id);
+        $account = $getAction->execute((int) $id);
 
         if (! $account) {
             return $this->error('Account not found', 404);
         }
 
-        $account->delete();
+        $deleteAction->execute($account);
 
         return $this->success(null, 'Account deleted successfully');
     }

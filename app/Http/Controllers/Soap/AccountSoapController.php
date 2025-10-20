@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Soap;
 
-use App\Models\Account;
+use App\Actions\Account\CreateAccountAction;
+use App\Actions\Account\DeleteAccountAction;
+use App\Actions\Account\GetAccountAction;
+use App\Actions\Account\GetAccountsAction;
+use App\Actions\Account\UpdateAccountAction;
 
 class AccountSoapController
 {
@@ -13,7 +17,8 @@ class AccountSoapController
      */
     public function getAccounts()
     {
-        $accounts = Account::with(['usernames', 'identities'])->get();
+        $action = new GetAccountsAction;
+        $accounts = $action->execute();
 
         return [
             'success' => true,
@@ -30,7 +35,8 @@ class AccountSoapController
      */
     public function getAccount($id)
     {
-        $account = Account::with(['usernames', 'identities'])->find($id);
+        $action = new GetAccountAction;
+        $account = $action->execute((int) $id);
 
         if (! $account) {
             return [
@@ -59,7 +65,8 @@ class AccountSoapController
     public function createAccount($name, $email, $role = null, $type = null)
     {
         try {
-            $account = Account::create([
+            $action = new CreateAccountAction;
+            $account = $action->execute([
                 'name' => $name,
                 'email' => $email,
                 'role' => $role,
@@ -92,7 +99,8 @@ class AccountSoapController
      */
     public function updateAccount($id, $name = null, $email = null, $role = null, $type = null)
     {
-        $account = Account::find($id);
+        $getAction = new GetAccountAction;
+        $account = $getAction->execute((int) $id);
 
         if (! $account) {
             return [
@@ -110,12 +118,13 @@ class AccountSoapController
                 'type' => $type,
             ], fn ($value) => $value !== null);
 
-            $account->update($data);
+            $updateAction = new UpdateAccountAction;
+            $account = $updateAction->execute($account, $data);
 
             return [
                 'success' => true,
                 'message' => 'Account updated successfully',
-                'data' => $account->fresh()->toArray(),
+                'data' => $account->toArray(),
             ];
         } catch (\Exception $e) {
             return [
@@ -134,7 +143,8 @@ class AccountSoapController
      */
     public function deleteAccount($id)
     {
-        $account = Account::find($id);
+        $getAction = new GetAccountAction;
+        $account = $getAction->execute((int) $id);
 
         if (! $account) {
             return [
@@ -145,7 +155,8 @@ class AccountSoapController
         }
 
         try {
-            $account->delete();
+            $deleteAction = new DeleteAccountAction;
+            $deleteAction->execute($account);
 
             return [
                 'success' => true,
