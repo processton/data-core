@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AccountController;
+use App\Http\Controllers\Api\ComplianceFeatureController;
 use App\Http\Controllers\Api\EntityController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,16 @@ Route::prefix('v1')->group(function () {
 
     // Entity Management Routes (Admin)
     Route::apiResource('entities', EntityController::class);
+    Route::put('entities/{id}/schema', [EntityController::class, 'updateSchema']);
+
+    // Compliance Features Management Routes (Admin)
+    Route::prefix('compliance-features')->group(function () {
+        Route::get('/', [ComplianceFeatureController::class, 'index']);
+        Route::get('/complied-codes', [ComplianceFeatureController::class, 'compliedCodes']);
+        Route::get('/{id}', [ComplianceFeatureController::class, 'show']);
+        Route::post('/{id}/enable', [ComplianceFeatureController::class, 'enable']);
+        Route::post('/{id}/disable', [ComplianceFeatureController::class, 'disable']);
+    });
 
     // Entity Fields Management Routes (Admin)
     Route::prefix('entity-fields')->group(function () {

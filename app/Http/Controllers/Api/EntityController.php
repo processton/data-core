@@ -7,6 +7,7 @@ use App\Actions\Entity\DeleteEntityAction;
 use App\Actions\Entity\GetEntitiesAction;
 use App\Actions\Entity\GetEntityAction;
 use App\Actions\Entity\UpdateEntityAction;
+use App\Actions\Entity\UpdateEntitySchemaAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -204,5 +205,45 @@ class EntityController extends ApiController
         $deleteAction->execute($entity);
 
         return $this->success(null, 'Entity deleted successfully');
+    }
+
+    /**
+     * Update entity schema
+     *
+     * Update the JSON schema for an entity.
+     *
+     * @urlParam id integer required The ID of the entity. Example: 1
+     *
+     * @bodyParam schema array required The JSON schema for the entity.
+     *
+     * @response {
+     *  "success": true,
+     *  "message": "Entity schema updated successfully",
+     *  "data": {
+     *    "id": 1,
+     *    "name": "products",
+     *    "schema": {...}
+     *  }
+     * }
+     */
+    public function updateSchema(Request $request, string $id, GetEntityAction $getAction, UpdateEntitySchemaAction $updateSchemaAction): JsonResponse
+    {
+        $entity = $getAction->execute((int) $id);
+
+        if (! $entity) {
+            return $this->error('Entity not found', 404);
+        }
+
+        try {
+            $validated = $request->validate([
+                'schema' => 'required|array',
+            ]);
+
+            $entity = $updateSchemaAction->execute($entity, $validated['schema']);
+
+            return $this->success($entity, 'Entity schema updated successfully');
+        } catch (ValidationException $e) {
+            return $this->error('Validation failed', 422, $e->errors());
+        }
     }
 }
