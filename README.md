@@ -9,6 +9,7 @@ Data Core is a powerful backend system designed to manage dynamic entities with 
 ### Repository Goals
 
 - ✅ API-first architecture (REST APIs)
+- ✅ WebSocket Layer (WSL) for real-time event broadcasting
 - ✅ WSDL support for legacy integrations
 - ✅ Dynamic entity management with flexible schemas
 - ✅ Multi-database support (MySQL 8 + MongoDB)
@@ -21,6 +22,12 @@ Data Core is a powerful backend system designed to manage dynamic entities with 
 - ✅ Configurable CORS settings
 
 ## Key Features
+
+### WebSocket Layer (WSL)
+- Real-time event broadcasting for all REST operations
+- Channel-based communication
+- Supports Pusher, Laravel Reverb, and custom WebSocket servers
+- All CRUD operations automatically broadcast events
 
 ### Account Management
 - Multiple usernames per account
@@ -53,7 +60,11 @@ Data Core is a powerful backend system designed to manage dynamic entities with 
 - Admin privileges controlled via environment variables
 - Development access token generation command
 
-## API Documentation
+## Documentation
+
+- **[WebSocket Layer Documentation](WEBSOCKET.md)**: Complete guide to real-time event broadcasting
+- **[Development Guide](DEVELOPMENT.md)**: Setup and development instructions
+- **[Docker Guide](DOCKER.md)**: Containerized deployment
 
 When running in development mode, API documentation and playground are available at:
 - **API Docs**: `/api/docs`

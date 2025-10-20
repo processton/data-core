@@ -83,6 +83,7 @@ php artisan token:generate --role=admin --expires=7200
 ```bash
 php artisan test
 php artisan test --filter=AccountTest
+php artisan test --filter=WebSocketTest  # Test WebSocket functionality
 ```
 
 ### Code Styling
@@ -97,6 +98,18 @@ php artisan migrate              # Run migrations
 php artisan migrate:fresh        # Fresh migration
 php artisan migrate:rollback     # Rollback last migration
 php artisan db:seed              # Run seeders
+```
+
+### WebSocket Development
+```bash
+# View broadcasted events in development
+php artisan pail
+
+# Start Laravel Reverb (production WebSocket server)
+php artisan reverb:start
+
+# Queue worker for broadcasting
+php artisan queue:work
 ```
 
 ## API Endpoints
@@ -238,8 +251,31 @@ ADMIN_USERNAME=admin@example.com
 5. Commit with descriptive message
 6. Create pull request
 
+## WebSocket Layer
+
+The application includes a comprehensive WebSocket Layer (WSL) that mirrors all REST API operations. See [WEBSOCKET.md](WEBSOCKET.md) for complete documentation.
+
+### Quick Start
+
+1. Set broadcast driver in `.env`:
+```env
+BROADCAST_DRIVER=log  # Development mode (logs events)
+```
+
+2. Test WebSocket events:
+```bash
+# Make API request
+curl http://localhost:8000/api/v1/accounts
+
+# View broadcasted event
+php artisan pail
+```
+
 ## Additional Resources
 
+- [WebSocket Layer Documentation](WEBSOCKET.md)
 - [Laravel Documentation](https://laravel.com/docs)
+- [Laravel Broadcasting](https://laravel.com/docs/broadcasting)
+- [Laravel Echo](https://laravel.com/docs/broadcasting#client-side-installation)
 - [MongoDB PHP Library](https://www.mongodb.com/docs/php-library/current/)
 - [Keycloak Documentation](https://www.keycloak.org/documentation)
