@@ -1,0 +1,99 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Models\Account;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+
+class AccountController extends ApiController
+{
+    /**
+     * Display a listing of accounts.
+     */
+    public function index(): JsonResponse
+    {
+        $accounts = Account::with(['usernames', 'identities'])->get();
+
+        return $this->success($accounts, 'Accounts retrieved successfully');
+    }
+
+    /**
+     * Store a newly created account.
+     */
+    public function store(Request $request): JsonResponse
+    {
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:accounts,email',
+                'role' => 'nullable|string|max:50',
+                'type' => 'nullable|string|max:50',
+            ]);
+
+            $account = Account::create($validated);
+
+            return $this->success($account, 'Account created successfully', 201);
+        } catch (ValidationException $e) {
+            return $this->error('Validation failed', 422, $e->errors());
+        }
+    }
+
+    /**
+     * Display the specified account.
+     */
+    public function show(string $id): JsonResponse
+    {
+        $account = Account::with(['usernames', 'identities'])->find($id);
+
+        if (! $account) {
+            return $this->error('Account not found', 404);
+        }
+
+        return $this->success($account, 'Account retrieved successfully');
+    }
+
+    /**
+     * Update the specified account.
+     */
+    public function update(Request $request, string $id): JsonResponse
+    {
+        $account = Account::find($id);
+
+        if (! $account) {
+            return $this->error('Account not found', 404);
+        }
+
+        try {
+            $validated = $request->validate([
+                'name' => 'sometimes|string|max:255',
+                'email' => 'sometimes|email|unique:accounts,email,'.$id,
+                'role' => 'nullable|string|max:50',
+                'type' => 'nullable|string|max:50',
+            ]);
+
+            $account->update($validated);
+
+            return $this->success($account, 'Account updated successfully');
+        } catch (ValidationException $e) {
+            return $this->error('Validation failed', 422, $e->errors());
+        }
+    }
+
+    /**
+     * Remove the specified account.
+     */
+    public function destroy(string $id): JsonResponse
+    {
+        $account = Account::find($id);
+
+        if (! $account) {
+            return $this->error('Account not found', 404);
+        }
+
+        $account->delete();
+
+        return $this->success(null, 'Account deleted successfully');
+    }
+}
