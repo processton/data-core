@@ -2,13 +2,14 @@ version: '3.8'
 
 services:
   # Application Service
+  
   app:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: data-core-app
-    restart: unless-stopped
-    working_dir: /var/www/html
+      dockerfile: docker/Dockerfile
+    container_name: app
+    ports:
+      - "80:80"
     volumes:
       - ./:/var/www/html
       - ./storage:/var/www/html/storage
@@ -35,21 +36,6 @@ services:
       - DB_PASSWORD_SECONDARY=secret
       - MONGODB_URI=mongodb://mongodb:27017
       - MONGODB_DATABASE=data_core_entities
-
-  # Nginx Service
-  nginx:
-    image: nginx:alpine
-    container_name: data-core-nginx
-    restart: unless-stopped
-    ports:
-      - "8000:80"
-    volumes:
-      - ./:/var/www/html
-      - ./docker/nginx/conf.d:/etc/nginx/conf.d
-    networks:
-      - data-core-network
-    depends_on:
-      - app
 
   # Primary MySQL Database Service
   mysql_primary:
