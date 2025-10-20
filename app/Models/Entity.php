@@ -49,4 +49,12 @@ class Entity extends Model
     {
         return $this->hasMany(EntityTrigger::class);
     }
+
+    /**
+     * Get the identities for the entity.
+     */
+    public function identities(): HasMany
+    {
+        return $this->hasMany(EntityIdentity::class);
+    }
 }
