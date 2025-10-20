@@ -252,6 +252,159 @@ ADMIN_USERNAME=admin@example.com
 5. Commit with descriptive message
 6. Create pull request
 
+## Module Extension System
+
+Data Core provides a powerful module system that allows developers to extend functionality by registering entities, compliance features, and custom routes.
+
+### Registering a Module
+
+Create a service provider for your module and use the `ModuleRegistrationService`:
+
+```php
+use App\Services\Module\ModuleRegistrationService;
+
+class YourModuleServiceProvider extends ServiceProvider
+{
+    public function boot(ModuleRegistrationService $moduleService): void
+    {
+        $moduleService->registerModule('your_module', [
+            // Define entity types
+            'entities' => [
+                [
+                    'name' => 'customer',
+                    'display_name' => 'Customer',
+                    'description' => 'Customer entity',
+                    'collection_name' => 'customers',
+                    'schema' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'name' => ['type' => 'string'],
+                            'email' => ['type' => 'string'],
+                        ],
+                    ],
+                    'is_active' => true,
+                ],
+            ],
+            
+            // Define compliance features
+            'compliance_features' => [
+                [
+                    'code' => 'GDPR',
+                    'name' => 'General Data Protection Regulation',
+                    'description' => 'EU data protection compliance',
+                    'is_enabled' => false,
+                ],
+            ],
+            
+            // Define module-specific routes
+            'routes' => function () {
+                Route::get('/customers', [CustomerController::class, 'index']);
+                Route::post('/customers', [CustomerController::class, 'store']);
+            },
+        ]);
+    }
+}
+```
+
+Module routes will be automatically prefixed with `/api/v1/modules/{module_name}`.
+
+### Entity Identities
+
+Register multiple identity keys for entities to enable flexible lookups:
+
+```php
+use App\Services\Entity\EntityIdentityService;
+
+$identityService = app(EntityIdentityService::class);
+
+// Register a single identity
+$identityService->registerIdentity(
+    entityId: $entity->id,
+    identityKey: 'uuid',
+    identityValue: 'unique-uuid-here',
+    metadata: ['source' => 'external_system']
+);
+
+// Register multiple identities at once
+$identityService->registerMultipleIdentities($entity->id, [
+    ['key' => 'uuid', 'value' => 'uuid-123', 'metadata' => null],
+    ['key' => 'external_id', 'value' => 'ext-456', 'metadata' => ['system' => 'crm']],
+    ['key' => 'legacy_code', 'value' => 'LEG-789', 'metadata' => null],
+]);
+
+// Find entity by identity
+$entity = $identityService->findEntityByIdentity('uuid', 'uuid-123');
+
+// Get all identities for an entity
+$identities = $identityService->getEntityIdentities($entity->id);
+```
+
+### Compliance Features
+
+Control module behavior based on enabled compliance features:
+
+```php
+use App\Models\ComplianceFeature;
+
+// Check if a compliance feature is enabled
+$gdprEnabled = ComplianceFeature::where('code', 'GDPR')
+    ->where('is_enabled', true)
+    ->exists();
+
+if ($gdprEnabled) {
+    // Apply GDPR-specific logic
+    $this->applyDataMinimization();
+    $this->enableRightToErasure();
+}
+```
+
+### Entity Schema Management
+
+Update entity schemas dynamically via API:
+
+```bash
+# Update entity schema
+curl -X PUT http://localhost:8000/api/v1/entities/{id}/schema \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "schema": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "email": {"type": "string", "format": "email"},
+        "age": {"type": "integer", "minimum": 0}
+      },
+      "required": ["name", "email"]
+    }
+  }'
+```
+
+### Compliance Feature APIs
+
+```bash
+# List all compliance features
+GET /api/v1/compliance-features
+
+# Get a specific compliance feature
+GET /api/v1/compliance-features/{id}
+
+# Enable a compliance feature
+POST /api/v1/compliance-features/{id}/enable
+
+# Disable a compliance feature
+POST /api/v1/compliance-features/{id}/disable
+
+# Get only enabled compliance codes
+GET /api/v1/compliance-features/complied-codes
+```
+
+### Permission Model
+
+- **Admin APIs** (outside modules): Require `admin` role with `internal` type
+- **Module APIs**: Default access for `user` role with `internal` type
+- Module-specific routes are automatically scoped under `/api/v1/modules/{module_name}`
+
 ## Architecture and Best Practices
 
 For comprehensive development guidelines, architecture details, and best practices, refer to:
