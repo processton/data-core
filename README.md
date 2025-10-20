@@ -1,61 +1,108 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Data Core
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A flexible entity management system with dynamic schema support, built on Laravel framework.
 
-## About Laravel
+## About Data Core
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Data Core is a powerful backend system designed to manage dynamic entities with flexible schemas. It provides a robust API for entity management, webhooks, and identity management, with support for both relational and document-based storage.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Repository Goals
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- ✅ API-first architecture (REST APIs)
+- ✅ WSDL support for legacy integrations
+- ✅ Dynamic entity management with flexible schemas
+- ✅ Multi-database support (MySQL 8 + MongoDB)
+- ✅ Keycloak integration for authentication
+- ✅ Role-based access control (RBAC)
+- ✅ Webhook support for entity triggers
+- ✅ API documentation and playground
+- ✅ Dockerized deployment
+- ✅ Admin management for entities, fields, triggers, identities, and indexing
+- ✅ Configurable CORS settings
 
-## Learning Laravel
+## Key Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Account Management
+- Multiple usernames per account
+- Role and type-based permissions
+- Keycloak-based authentication (no local passwords)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Entity System
+- Dynamic entity creation and management
+- Flexible field definitions
+- Custom triggers and webhooks
+- MongoDB storage for entity records
+- MySQL storage for structural schema
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Admin Capabilities
+- Manage entities (objects) and their fields
+- Configure entity triggers and webhooks
+- Identity management
+- Indexing configuration
+- CORS settings management
 
-## Laravel Sponsors
+## Architecture
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Databases
+- **MySQL 8 (Primary)**: Structural schema, accounts, roles, permissions
+- **MySQL 8 (Secondary)**: Additional structural data
+- **MongoDB**: Entity records and documents
 
-### Premium Partners
+### Authentication
+- Keycloak for all authentication and authorization
+- Admin privileges controlled via environment variables
+- Development access token generation command
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## API Documentation
 
-## Contributing
+When running in development mode, API documentation and playground are available at:
+- **API Docs**: `/api/docs`
+- **API Playground**: `/api/playground`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Environment Configuration
 
-## Code of Conduct
+Key environment variables:
+```
+ADMIN_ROLE=admin
+ADMIN_USERNAME=admin@example.com
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Keycloak Configuration
+KEYCLOAK_URL=
+KEYCLOAK_REALM=
+KEYCLOAK_CLIENT_ID=
+KEYCLOAK_CLIENT_SECRET=
 
-## Security Vulnerabilities
+# Database Configuration
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=data_core
+DB_USERNAME=root
+DB_PASSWORD=
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+DB_CONNECTION_SECONDARY=mysql
+DB_HOST_SECONDARY=127.0.0.1
+DB_PORT_SECONDARY=3306
+DB_DATABASE_SECONDARY=data_core_secondary
+DB_USERNAME_SECONDARY=root
+DB_PASSWORD_SECONDARY=
+
+MONGODB_URI=mongodb://localhost:27017
+MONGODB_DATABASE=data_core_entities
+```
+
+## Development
+
+### Docker Setup
+```bash
+docker-compose up -d
+```
+
+### Generate Development Access Token
+```bash
+php artisan token:generate
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
