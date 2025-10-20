@@ -20,8 +20,8 @@ class SoapServerController extends Controller
             return response('WSDL file not found', 404);
         }
 
-        // Handle WSDL request (use has() so '?wsdl' without a value is detected)
-        if ($request->has('wsdl')) {
+        // Handle WSDL request
+        if ($request->query('wsdl') !== null) {
             return response()->file($wsdl, [
                 'Content-Type' => 'text/xml; charset=utf-8',
             ]);
@@ -44,30 +44,8 @@ class SoapServerController extends Controller
             ]);
         }
 
-        // Create and configure the SoapServer instance
-        try {
-            // Use the WSDL file to create a SoapServer. If WSDL unavailable for non-wsdl mode,
-            // fallback to non-WSDL mode with an 'uri' option.
-            if ($request->has('wsdl')) {
-                $server = new SoapServer($wsdl);
-            } else {
-                $server = new SoapServer(null, ['uri' => url('/')]);
-            }
-
-            // Set the service class
-            $server->setClass(SoapService::class);
-        } catch (\Throwable $e) {
-            $message = "Failed to initialize SoapServer: " . $e->getMessage();
-            return response($message, 500, ['Content-Type' => 'text/plain; charset=utf-8']);
-        }
-
-        // Only handle POST requests (SOAP clients send POST). For GET without ?wsdl,
-        // return a helpful 405 response instead of letting SoapServer attempt WSDL generation.
-        if (! $request->isMethod('POST')) {
-            return response('SOAP endpoint accepts POST requests only. To retrieve the WSDL use ?wsdl', 405, [
-                'Content-Type' => 'text/plain; charset=utf-8',
-            ]);
-        }
+        // Set the service class
+        $server->setClass(SoapService::class);
 
         // Handle the request
         ob_start();
