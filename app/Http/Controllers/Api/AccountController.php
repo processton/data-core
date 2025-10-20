@@ -7,10 +7,33 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @group Account Management
+ *
+ * APIs for managing accounts in the system
+ */
 class AccountController extends ApiController
 {
     /**
-     * Display a listing of accounts.
+     * List accounts
+     *
+     * Get a paginated list of all accounts in the system.
+     *
+     * @response {
+     *  "success": true,
+     *  "message": "Accounts retrieved successfully",
+     *  "data": [
+     *    {
+     *      "id": 1,
+     *      "name": "John Doe",
+     *      "email": "john@example.com",
+     *      "role": "user",
+     *      "type": "personal",
+     *      "created_at": "2025-10-20T12:00:00.000000Z",
+     *      "updated_at": "2025-10-20T12:00:00.000000Z"
+     *    }
+     *  ]
+     * }
      */
     public function index(): JsonResponse
     {
@@ -20,7 +43,28 @@ class AccountController extends ApiController
     }
 
     /**
-     * Store a newly created account.
+     * Create account
+     *
+     * Create a new account in the system.
+     *
+     * @bodyParam name string required The full name of the account holder. Example: John Doe
+     * @bodyParam email string required The email address. Example: john@example.com
+     * @bodyParam role string The role of the account. Example: user
+     * @bodyParam type string The type of account. Example: personal
+     *
+     * @response 201 {
+     *  "success": true,
+     *  "message": "Account created successfully",
+     *  "data": {
+     *    "id": 1,
+     *    "name": "John Doe",
+     *    "email": "john@example.com",
+     *    "role": "user",
+     *    "type": "personal",
+     *    "created_at": "2025-10-20T12:00:00.000000Z",
+     *    "updated_at": "2025-10-20T12:00:00.000000Z"
+     *  }
+     * }
      */
     public function store(Request $request): JsonResponse
     {
@@ -41,7 +85,30 @@ class AccountController extends ApiController
     }
 
     /**
-     * Display the specified account.
+     * Get account
+     *
+     * Retrieve a specific account by its ID.
+     *
+     * @urlParam id integer required The ID of the account. Example: 1
+     *
+     * @response {
+     *  "success": true,
+     *  "message": "Account retrieved successfully",
+     *  "data": {
+     *    "id": 1,
+     *    "name": "John Doe",
+     *    "email": "john@example.com",
+     *    "role": "user",
+     *    "type": "personal",
+     *    "created_at": "2025-10-20T12:00:00.000000Z",
+     *    "updated_at": "2025-10-20T12:00:00.000000Z"
+     *  }
+     * }
+     * @response 404 {
+     *  "success": false,
+     *  "message": "Account not found",
+     *  "errors": null
+     * }
      */
     public function show(string $id): JsonResponse
     {
@@ -55,7 +122,30 @@ class AccountController extends ApiController
     }
 
     /**
-     * Update the specified account.
+     * Update account
+     *
+     * Update an existing account.
+     *
+     * @urlParam id integer required The ID of the account. Example: 1
+     *
+     * @bodyParam name string The full name of the account holder. Example: John Updated
+     * @bodyParam email string The email address. Example: john.updated@example.com
+     * @bodyParam role string The role of the account. Example: admin
+     * @bodyParam type string The type of account. Example: business
+     *
+     * @response {
+     *  "success": true,
+     *  "message": "Account updated successfully",
+     *  "data": {
+     *    "id": 1,
+     *    "name": "John Updated",
+     *    "email": "john.updated@example.com",
+     *    "role": "admin",
+     *    "type": "business",
+     *    "created_at": "2025-10-20T12:00:00.000000Z",
+     *    "updated_at": "2025-10-20T12:05:00.000000Z"
+     *  }
+     * }
      */
     public function update(Request $request, string $id): JsonResponse
     {
@@ -82,7 +172,17 @@ class AccountController extends ApiController
     }
 
     /**
-     * Remove the specified account.
+     * Delete account
+     *
+     * Delete an account from the system.
+     *
+     * @urlParam id integer required The ID of the account. Example: 1
+     *
+     * @response {
+     *  "success": true,
+     *  "message": "Account deleted successfully",
+     *  "data": null
+     * }
      */
     public function destroy(string $id): JsonResponse
     {
