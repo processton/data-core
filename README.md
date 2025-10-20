@@ -59,6 +59,21 @@ When running in development mode, API documentation and playground are available
 - **API Docs**: `/api/docs`
 - **API Playground**: `/api/playground`
 
+For comprehensive API usage examples, see [API_USAGE.md](API_USAGE.md).
+
+### REST API
+
+The REST API is available at `/api/v1/` with the following endpoints:
+- **Accounts**: `/api/v1/accounts` - Full CRUD operations
+- **Entities**: `/api/v1/entities` - Full CRUD operations
+
+### SOAP API
+
+The SOAP API is available at `/soap` with WSDL at `/soap?wsdl`.
+All REST operations are available via SOAP for legacy system integrations.
+
+See [API_USAGE.md](API_USAGE.md) for detailed examples of both REST and SOAP usage.
+
 ## Environment Configuration
 
 Key environment variables:

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="DataCoreService"
+             targetNamespace="http://data-core.processton.com/soap"
+             xmlns:tns="http://data-core.processton.com/soap"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+    <!-- Types -->
+    <types>
+        <xsd:schema targetNamespace="http://data-core.processton.com/soap">
+            <!-- Account Response Type -->
+            <xsd:complexType name="AccountResponse">
+                <xsd:sequence>
+                    <xsd:element name="success" type="xsd:boolean"/>
+                    <xsd:element name="message" type="xsd:string"/>
+                    <xsd:element name="data" type="xsd:anyType" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <!-- Entity Response Type -->
+            <xsd:complexType name="EntityResponse">
+                <xsd:sequence>
+                    <xsd:element name="success" type="xsd:boolean"/>
+                    <xsd:element name="message" type="xsd:string"/>
+                    <xsd:element name="data" type="xsd:anyType" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>
+
+    <!-- Account Messages -->
+    <message name="getAccountsRequest"/>
+    <message name="getAccountsResponse">
+        <part name="return" type="tns:AccountResponse"/>
+    </message>
+
+    <message name="getAccountRequest">
+        <part name="id" type="xsd:int"/>
+    </message>
+    <message name="getAccountResponse">
+        <part name="return" type="tns:AccountResponse"/>
+    </message>
+
+    <message name="createAccountRequest">
+        <part name="name" type="xsd:string"/>
+        <part name="email" type="xsd:string"/>
+        <part name="role" type="xsd:string"/>
+        <part name="type" type="xsd:string"/>
+    </message>
+    <message name="createAccountResponse">
+        <part name="return" type="tns:AccountResponse"/>
+    </message>
+
+    <message name="updateAccountRequest">
+        <part name="id" type="xsd:int"/>
+        <part name="name" type="xsd:string"/>
+        <part name="email" type="xsd:string"/>
+        <part name="role" type="xsd:string"/>
+        <part name="type" type="xsd:string"/>
+    </message>
+    <message name="updateAccountResponse">
+        <part name="return" type="tns:AccountResponse"/>
+    </message>
+
+    <message name="deleteAccountRequest">
+        <part name="id" type="xsd:int"/>
+    </message>
+    <message name="deleteAccountResponse">
+        <part name="return" type="tns:AccountResponse"/>
+    </message>
+
+    <!-- Entity Messages -->
+    <message name="getEntitiesRequest"/>
+    <message name="getEntitiesResponse">
+        <part name="return" type="tns:EntityResponse"/>
+    </message>
+
+    <message name="getEntityRequest">
+        <part name="id" type="xsd:int"/>
+    </message>
+    <message name="getEntityResponse">
+        <part name="return" type="tns:EntityResponse"/>
+    </message>
+
+    <message name="createEntityRequest">
+        <part name="name" type="xsd:string"/>
+        <part name="display_name" type="xsd:string"/>
+        <part name="collection_name" type="xsd:string"/>
+        <part name="description" type="xsd:string"/>
+        <part name="is_active" type="xsd:boolean"/>
+    </message>
+    <message name="createEntityResponse">
+        <part name="return" type="tns:EntityResponse"/>
+    </message>
+
+    <message name="updateEntityRequest">
+        <part name="id" type="xsd:int"/>
+        <part name="name" type="xsd:string"/>
+        <part name="display_name" type="xsd:string"/>
+        <part name="collection_name" type="xsd:string"/>
+        <part name="description" type="xsd:string"/>
+        <part name="is_active" type="xsd:boolean"/>
+    </message>
+    <message name="updateEntityResponse">
+        <part name="return" type="tns:EntityResponse"/>
+    </message>
+
+    <message name="deleteEntityRequest">
+        <part name="id" type="xsd:int"/>
+    </message>
+    <message name="deleteEntityResponse">
+        <part name="return" type="tns:EntityResponse"/>
+    </message>
+
+    <!-- Port Type -->
+    <portType name="DataCorePortType">
+        <!-- Account Operations -->
+        <operation name="getAccounts">
+            <input message="tns:getAccountsRequest"/>
+            <output message="tns:getAccountsResponse"/>
+        </operation>
+        <operation name="getAccount">
+            <input message="tns:getAccountRequest"/>
+            <output message="tns:getAccountResponse"/>
+        </operation>
+        <operation name="createAccount">
+            <input message="tns:createAccountRequest"/>
+            <output message="tns:createAccountResponse"/>
+        </operation>
+        <operation name="updateAccount">
+            <input message="tns:updateAccountRequest"/>
+            <output message="tns:updateAccountResponse"/>
+        </operation>
+        <operation name="deleteAccount">
+            <input message="tns:deleteAccountRequest"/>
+            <output message="tns:deleteAccountResponse"/>
+        </operation>
+
+        <!-- Entity Operations -->
+        <operation name="getEntities">
+            <input message="tns:getEntitiesRequest"/>
+            <output message="tns:getEntitiesResponse"/>
+        </operation>
+        <operation name="getEntity">
+            <input message="tns:getEntityRequest"/>
+            <output message="tns:getEntityResponse"/>
+        </operation>
+        <operation name="createEntity">
+            <input message="tns:createEntityRequest"/>
+            <output message="tns:createEntityResponse"/>
+        </operation>
+        <operation name="updateEntity">
+            <input message="tns:updateEntityRequest"/>
+            <output message="tns:updateEntityResponse"/>
+        </operation>
+        <operation name="deleteEntity">
+            <input message="tns:deleteEntityRequest"/>
+            <output message="tns:deleteEntityResponse"/>
+        </operation>
+    </portType>
+
+    <!-- Binding -->
+    <binding name="DataCoreBinding" type="tns:DataCorePortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <!-- Account Bindings -->
+        <operation name="getAccounts">
+            <soap:operation soapAction="getAccounts"/>
+            <input><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+            <output><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+        </operation>
+        <operation name="getAccount">
+            <soap:operation soapAction="getAccount"/>
+            <input><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+            <output><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+        </operation>
+        <operation name="createAccount">
+            <soap:operation soapAction="createAccount"/>
+            <input><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+            <output><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+        </operation>
+        <operation name="updateAccount">
+            <soap:operation soapAction="updateAccount"/>
+            <input><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+            <output><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+        </operation>
+        <operation name="deleteAccount">
+            <soap:operation soapAction="deleteAccount"/>
+            <input><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+            <output><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+        </operation>
+
+        <!-- Entity Bindings -->
+        <operation name="getEntities">
+            <soap:operation soapAction="getEntities"/>
+            <input><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+            <output><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+        </operation>
+        <operation name="getEntity">
+            <soap:operation soapAction="getEntity"/>
+            <input><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+            <output><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+        </operation>
+        <operation name="createEntity">
+            <soap:operation soapAction="createEntity"/>
+            <input><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+            <output><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+        </operation>
+        <operation name="updateEntity">
+            <soap:operation soapAction="updateEntity"/>
+            <input><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+            <output><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+        </operation>
+        <operation name="deleteEntity">
+            <soap:operation soapAction="deleteEntity"/>
+            <input><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></input>
+            <output><soap:body use="encoded" namespace="http://data-core.processton.com/soap" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/></output>
+        </operation>
+    </binding>
+
+    <!-- Service -->
+    <service name="DataCoreService">
+        <documentation>Data Core SOAP Service</documentation>
+        <port name="DataCorePort" binding="tns:DataCoreBinding">
+            <soap:address location="http://localhost:8000/soap"/>
+        </port>
+    </service>
+</definitions>

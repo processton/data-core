@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\Soap\SoapServerController;
 use Illuminate\Support\Facades\Route;
+
+// SOAP Service Endpoint
+Route::any('/soap', [SoapServerController::class, 'handle']);
 
 // API Documentation and Playground (Development Mode Only)
 if (config('app.debug')) {
@@ -8,12 +12,12 @@ if (config('app.debug')) {
         return response()->json([
             'message' => 'API Documentation',
             'version' => '1.0.0',
-            'endpoints' => [
-                '/api/accounts' => 'Account management',
-                '/api/entities' => 'Entity management',
-                '/api/roles' => 'Role management',
-                '/api/permissions' => 'Permission management',
+            'rest_endpoints' => [
+                '/api/v1/accounts' => 'Account management (REST)',
+                '/api/v1/entities' => 'Entity management (REST)',
             ],
+            'soap_endpoint' => '/soap',
+            'wsdl' => '/soap?wsdl',
         ]);
     });
 
