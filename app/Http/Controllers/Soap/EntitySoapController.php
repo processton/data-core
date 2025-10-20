@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers\Soap;
 
-use App\Models\Entity;
+use App\Actions\Entity\CreateEntityAction;
+use App\Actions\Entity\DeleteEntityAction;
+use App\Actions\Entity\GetEntitiesAction;
+use App\Actions\Entity\GetEntityAction;
+use App\Actions\Entity\UpdateEntityAction;
 
 class EntitySoapController
 {
@@ -13,7 +17,8 @@ class EntitySoapController
      */
     public function getEntities()
     {
-        $entities = Entity::with(['fields', 'triggers'])->get();
+        $action = new GetEntitiesAction;
+        $entities = $action->execute();
 
         return [
             'success' => true,
@@ -30,7 +35,8 @@ class EntitySoapController
      */
     public function getEntity($id)
     {
-        $entity = Entity::with(['fields', 'triggers'])->find($id);
+        $action = new GetEntityAction;
+        $entity = $action->execute((int) $id);
 
         if (! $entity) {
             return [
@@ -60,7 +66,8 @@ class EntitySoapController
     public function createEntity($name, $display_name, $collection_name, $description = null, $is_active = true)
     {
         try {
-            $entity = Entity::create([
+            $action = new CreateEntityAction;
+            $entity = $action->execute([
                 'name' => $name,
                 'display_name' => $display_name,
                 'collection_name' => $collection_name,
@@ -95,7 +102,8 @@ class EntitySoapController
      */
     public function updateEntity($id, $name = null, $display_name = null, $collection_name = null, $description = null, $is_active = null)
     {
-        $entity = Entity::find($id);
+        $getAction = new GetEntityAction;
+        $entity = $getAction->execute((int) $id);
 
         if (! $entity) {
             return [
@@ -114,12 +122,13 @@ class EntitySoapController
                 'is_active' => $is_active,
             ], fn ($value) => $value !== null);
 
-            $entity->update($data);
+            $updateAction = new UpdateEntityAction;
+            $entity = $updateAction->execute($entity, $data);
 
             return [
                 'success' => true,
                 'message' => 'Entity updated successfully',
-                'data' => $entity->fresh()->toArray(),
+                'data' => $entity->toArray(),
             ];
         } catch (\Exception $e) {
             return [
@@ -138,7 +147,8 @@ class EntitySoapController
      */
     public function deleteEntity($id)
     {
-        $entity = Entity::find($id);
+        $getAction = new GetEntityAction;
+        $entity = $getAction->execute((int) $id);
 
         if (! $entity) {
             return [
@@ -149,7 +159,8 @@ class EntitySoapController
         }
 
         try {
-            $entity->delete();
+            $deleteAction = new DeleteEntityAction;
+            $deleteAction->execute($entity);
 
             return [
                 'success' => true,

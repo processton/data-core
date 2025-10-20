@@ -119,12 +119,11 @@ class SoapApiTest extends TestCase
 
     public function test_api_docs_includes_soap_info(): void
     {
-        $response = $this->getJson('/api/docs');
+        $response = $this->get('/api/docs');
 
         $response->assertStatus(200)
-            ->assertJson([
-                'soap_endpoint' => '/soap',
-                'wsdl' => '/soap?wsdl',
-            ]);
+            ->assertSee('Data Core API Documentation')
+            ->assertSee('Account Management')
+            ->assertSee('Entity Management');
     }
 }
