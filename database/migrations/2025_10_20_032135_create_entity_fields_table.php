@@ -24,7 +24,7 @@ return new class extends Migration
             $table->json('default_value')->nullable();
             $table->integer('order')->default(0);
             $table->timestamps();
-            
+
             $table->unique(['entity_id', 'name']);
         });
     }

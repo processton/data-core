@@ -29,11 +29,11 @@ class GenerateAccessToken extends Command
     public function handle()
     {
         $role = $this->option('role');
-        $expires = $this->option('expires');
-        
+        $expires = (int) $this->option('expires');
+
         // Generate a random token
         $token = base64_encode(Str::random(64));
-        
+
         // Create token payload
         $payload = [
             'token' => $token,
@@ -41,19 +41,19 @@ class GenerateAccessToken extends Command
             'expires_at' => now()->addSeconds($expires)->toIso8601String(),
             'created_at' => now()->toIso8601String(),
         ];
-        
+
         $this->info('Development Access Token Generated');
         $this->newLine();
-        $this->line('Token: ' . $token);
-        $this->line('Role: ' . $role);
-        $this->line('Expires: ' . $payload['expires_at']);
+        $this->line('Token: '.$token);
+        $this->line('Role: '.$role);
+        $this->line('Expires: '.$payload['expires_at']);
         $this->newLine();
         $this->warn('⚠️  This token is for DEVELOPMENT USE ONLY');
         $this->warn('⚠️  In production, use Keycloak for authentication');
         $this->newLine();
         $this->info('Use this token in your API requests:');
-        $this->line('Authorization: Bearer ' . $token);
-        
+        $this->line('Authorization: Bearer '.$token);
+
         return Command::SUCCESS;
     }
 }

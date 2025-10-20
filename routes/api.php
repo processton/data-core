@@ -20,7 +20,7 @@ Route::get('/health', function () {
 
 // API v1 Routes
 Route::prefix('v1')->group(function () {
-    
+
     // Account Management Routes
     Route::prefix('accounts')->group(function () {
         Route::get('/', function () {

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->json('provider_data')->nullable();
             $table->timestamp('last_login_at')->nullable();
             $table->timestamps();
-            
+
             $table->unique(['account_id', 'provider']);
         });
     }
