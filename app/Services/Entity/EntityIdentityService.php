@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * Service for managing entity identities.
- * 
+ *
  * This helper allows developers to register multiple identity keys for an entity.
  */
 class EntityIdentityService
@@ -16,11 +16,10 @@ class EntityIdentityService
     /**
      * Register an identity for an entity.
      *
-     * @param int $entityId The entity ID
-     * @param string $identityKey The identity key (e.g., 'uuid', 'code', 'external_id')
-     * @param string $identityValue The identity value
-     * @param array|null $metadata Optional metadata
-     * @return EntityIdentity
+     * @param  int  $entityId  The entity ID
+     * @param  string  $identityKey  The identity key (e.g., 'uuid', 'code', 'external_id')
+     * @param  string  $identityValue  The identity value
+     * @param  array|null  $metadata  Optional metadata
      */
     public function registerIdentity(int $entityId, string $identityKey, string $identityValue, ?array $metadata = null): EntityIdentity
     {
@@ -39,9 +38,8 @@ class EntityIdentityService
     /**
      * Register multiple identities for an entity.
      *
-     * @param int $entityId The entity ID
-     * @param array $identities Array of identities [['key' => 'uuid', 'value' => '...', 'metadata' => []], ...]
-     * @return array
+     * @param  int  $entityId  The entity ID
+     * @param  array  $identities  Array of identities [['key' => 'uuid', 'value' => '...', 'metadata' => []], ...]
      */
     public function registerMultipleIdentities(int $entityId, array $identities): array
     {
@@ -64,9 +62,8 @@ class EntityIdentityService
     /**
      * Find an entity by its identity.
      *
-     * @param string $identityKey The identity key
-     * @param string $identityValue The identity value
-     * @return Entity|null
+     * @param  string  $identityKey  The identity key
+     * @param  string  $identityValue  The identity value
      */
     public function findEntityByIdentity(string $identityKey, string $identityValue): ?Entity
     {
@@ -80,7 +77,7 @@ class EntityIdentityService
     /**
      * Get all identities for an entity.
      *
-     * @param int $entityId The entity ID
+     * @param  int  $entityId  The entity ID
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getEntityIdentities(int $entityId)
@@ -91,10 +88,9 @@ class EntityIdentityService
     /**
      * Remove an identity from an entity.
      *
-     * @param int $entityId The entity ID
-     * @param string $identityKey The identity key
-     * @param string $identityValue The identity value
-     * @return bool
+     * @param  int  $entityId  The entity ID
+     * @param  string  $identityKey  The identity key
+     * @param  string  $identityValue  The identity value
      */
     public function removeIdentity(int $entityId, string $identityKey, string $identityValue): bool
     {

@@ -17,7 +17,7 @@ class EntityIdentityTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = new EntityIdentityService();
+        $this->service = new EntityIdentityService;
     }
 
     public function test_can_register_entity_identity(): void

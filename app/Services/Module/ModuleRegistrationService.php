@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 /**
  * Service for registering modules.
- * 
+ *
  * Modules can register entity types, compliance features, and routes.
  */
 class ModuleRegistrationService
@@ -19,9 +19,8 @@ class ModuleRegistrationService
     /**
      * Register a module with its configuration.
      *
-     * @param string $moduleName The unique module name
-     * @param array $config Module configuration
-     * @return void
+     * @param  string  $moduleName  The unique module name
+     * @param  array  $config  Module configuration
      */
     public function registerModule(string $moduleName, array $config): void
     {
@@ -48,10 +47,6 @@ class ModuleRegistrationService
 
     /**
      * Register entity types for a module.
-     *
-     * @param string $moduleName
-     * @param array $entities
-     * @return void
      */
     protected function registerEntities(string $moduleName, array $entities): void
     {
@@ -71,10 +66,6 @@ class ModuleRegistrationService
 
     /**
      * Register compliance features for a module.
-     *
-     * @param string $moduleName
-     * @param array $complianceFeatures
-     * @return void
      */
     protected function registerComplianceFeatures(string $moduleName, array $complianceFeatures): void
     {
@@ -94,10 +85,6 @@ class ModuleRegistrationService
 
     /**
      * Register routes for a module.
-     *
-     * @param string $moduleName
-     * @param callable $routesCallback
-     * @return void
      */
     protected function registerRoutes(string $moduleName, callable $routesCallback): void
     {
@@ -108,8 +95,6 @@ class ModuleRegistrationService
 
     /**
      * Get all registered modules.
-     *
-     * @return array
      */
     public function getRegisteredModules(): array
     {
@@ -118,9 +103,6 @@ class ModuleRegistrationService
 
     /**
      * Check if a module is registered.
-     *
-     * @param string $moduleName
-     * @return bool
      */
     public function isModuleRegistered(string $moduleName): bool
     {
@@ -129,9 +111,6 @@ class ModuleRegistrationService
 
     /**
      * Get a module's configuration.
-     *
-     * @param string $moduleName
-     * @return array|null
      */
     public function getModuleConfig(string $moduleName): ?array
     {
