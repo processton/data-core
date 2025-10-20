@@ -1,9 +1,9 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "processton/data-core",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "A flexible entity management system with dynamic schema support.",
+    "keywords": ["laravel", "api", "entity-management", "dynamic-schema", "keycloak"],
     "license": "MIT",
     "require": {
         "php": "^8.2",

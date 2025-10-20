@@ -1,0 +1,112 @@
+version: '3.8'
+
+services:
+  # Application Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: data-core-app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+      - ./storage:/var/www/html/storage
+    networks:
+      - data-core-network
+    depends_on:
+      - mysql_primary
+      - mysql_secondary
+      - mongodb
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql_primary
+      - DB_PORT=3306
+      - DB_DATABASE=data_core
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - DB_CONNECTION_SECONDARY=mysql
+      - DB_HOST_SECONDARY=mysql_secondary
+      - DB_PORT_SECONDARY=3306
+      - DB_DATABASE_SECONDARY=data_core_secondary
+      - DB_USERNAME_SECONDARY=root
+      - DB_PASSWORD_SECONDARY=secret
+      - MONGODB_URI=mongodb://mongodb:27017
+      - MONGODB_DATABASE=data_core_entities
+
+  # Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: data-core-nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - data-core-network
+    depends_on:
+      - app
+
+  # Primary MySQL Database Service
+  mysql_primary:
+    image: mysql:8.0
+    container_name: data-core-mysql-primary
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: data_core
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_primary_data:/var/lib/mysql
+    networks:
+      - data-core-network
+    command: --default-authentication-plugin=mysql_native_password
+
+  # Secondary MySQL Database Service
+  mysql_secondary:
+    image: mysql:8.0
+    container_name: data-core-mysql-secondary
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: data_core_secondary
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_secondary_data:/var/lib/mysql
+    networks:
+      - data-core-network
+    command: --default-authentication-plugin=mysql_native_password
+
+  # MongoDB Service
+  mongodb:
+    image: mongo:7
+    container_name: data-core-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: data_core_entities
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - data-core-network
+
+# Docker Networks
+networks:
+  data-core-network:
+    driver: bridge
+
+# Volumes
+volumes:
+  mysql_primary_data:
+    driver: local
+  mysql_secondary_data:
+    driver: local
+  mongodb_data:
+    driver: local

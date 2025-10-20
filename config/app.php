@@ -123,4 +123,33 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Configuration
+    |--------------------------------------------------------------------------
+    |
+    | These values are used to identify admin users and grant them special
+    | privileges within the application.
+    |
+    */
+
+    'admin_role' => env('ADMIN_ROLE', 'admin'),
+    'admin_username' => env('ADMIN_USERNAME', 'admin@example.com'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Keycloak Configuration
+    |--------------------------------------------------------------------------
+    |
+    | These values configure the Keycloak authentication integration.
+    |
+    */
+
+    'keycloak' => [
+        'url' => env('KEYCLOAK_URL', 'http://localhost:8080'),
+        'realm' => env('KEYCLOAK_REALM', 'data-core'),
+        'client_id' => env('KEYCLOAK_CLIENT_ID', 'data-core-api'),
+        'client_secret' => env('KEYCLOAK_CLIENT_SECRET', ''),
+    ],
+
 ];
