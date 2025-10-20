@@ -55,9 +55,27 @@ Data Core is a powerful backend system designed to manage dynamic entities with 
 
 ## API Documentation
 
-When running in development mode, API documentation and playground are available at:
-- **API Docs**: `/api/docs`
-- **API Playground**: `/api/playground`
+When running in development mode, comprehensive API documentation and interactive playground are available:
+- **API Docs**: `/api/docs` - Full documentation with examples in Bash, JavaScript, PHP, and Python
+- **API Playground**: `/api/playground` - Interactive Swagger UI for testing endpoints
+- **OpenAPI Spec**: `/api/docs.openapi` - OpenAPI 3.0 specification
+- **Postman Collection**: `/api/docs.postman` - Import into Postman for testing
+
+For detailed API usage examples, see [API_USAGE.md](API_USAGE.md).  
+For development guidelines and protocols, see [IMPLEMENTATION_PROTOCOL.md](IMPLEMENTATION_PROTOCOL.md).
+
+### REST API
+
+The REST API is available at `/api/v1/` with the following endpoints:
+- **Accounts**: `/api/v1/accounts` - Full CRUD operations
+- **Entities**: `/api/v1/entities` - Full CRUD operations
+
+### SOAP API
+
+The SOAP API is available at `/soap` with WSDL at `/soap?wsdl`.
+All REST operations are available via SOAP for legacy system integrations.
+
+See [API_USAGE.md](API_USAGE.md) for detailed examples of both REST and SOAP usage.
 
 ## Environment Configuration
 
@@ -100,7 +118,11 @@ docker-compose up -d
 
 ### Generate Development Access Token
 ```bash
+# Generate default user token
 php artisan token:generate
+
+# Generate admin token with custom expiry
+php artisan token:generate --role=admin --expires=7200
 ```
 
 ## License

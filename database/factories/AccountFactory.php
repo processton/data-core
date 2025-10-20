@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Account;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +10,13 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class AccountFactory extends Factory
 {
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var class-string<\Illuminate\Database\Eloquent\Model>
+     */
+    protected $model = Account::class;
+
     /**
      * Define the model's default state.
      *
@@ -19,8 +27,8 @@ class AccountFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'role' => 'user',
-            'type' => 'standard',
+            'role' => fake()->randomElement(['user', 'admin', 'moderator']),
+            'type' => fake()->randomElement(['personal', 'business', 'enterprise']),
             'email_verified_at' => now(),
         ];
     }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\AccountController;
+use App\Http\Controllers\Api\EntityController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,42 +24,10 @@ Route::get('/health', function () {
 Route::prefix('v1')->group(function () {
 
     // Account Management Routes
-    Route::prefix('accounts')->group(function () {
-        Route::get('/', function () {
-            return response()->json(['message' => 'List accounts']);
-        });
-        Route::post('/', function () {
-            return response()->json(['message' => 'Create account']);
-        });
-        Route::get('/{id}', function ($id) {
-            return response()->json(['message' => "Get account {$id}"]);
-        });
-        Route::put('/{id}', function ($id) {
-            return response()->json(['message' => "Update account {$id}"]);
-        });
-        Route::delete('/{id}', function ($id) {
-            return response()->json(['message' => "Delete account {$id}"]);
-        });
-    });
+    Route::apiResource('accounts', AccountController::class);
 
     // Entity Management Routes (Admin)
-    Route::prefix('entities')->group(function () {
-        Route::get('/', function () {
-            return response()->json(['message' => 'List entities']);
-        });
-        Route::post('/', function () {
-            return response()->json(['message' => 'Create entity']);
-        });
-        Route::get('/{id}', function ($id) {
-            return response()->json(['message' => "Get entity {$id}"]);
-        });
-        Route::put('/{id}', function ($id) {
-            return response()->json(['message' => "Update entity {$id}"]);
-        });
-        Route::delete('/{id}', function ($id) {
-            return response()->json(['message' => "Delete entity {$id}"]);
-        });
-    });
+    Route::apiResource('entities', EntityController::class);
 
     // Entity Fields Management Routes (Admin)
     Route::prefix('entity-fields')->group(function () {

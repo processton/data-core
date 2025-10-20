@@ -75,8 +75,18 @@
 
 ### Generate Access Token (Development)
 ```bash
+# Generate default user token (expires in 1 hour)
 php artisan token:generate
+
+# Generate admin token (expires in 2 hours)
 php artisan token:generate --role=admin --expires=7200
+
+# The command outputs the token and instructions for use
+```
+
+Use the generated token in API requests:
+```bash
+curl -H "Authorization: Bearer YOUR_TOKEN" http://localhost:8000/api/v1/accounts
 ```
 
 ### Run Tests
@@ -108,9 +118,13 @@ GET /api/health
 
 ### Documentation (Development Mode Only)
 ```bash
-GET /api/docs
-GET /api/playground
+GET /api/docs                # Interactive API documentation (Scribe)
+GET /api/playground          # Interactive API testing (Swagger UI)
+GET /api/docs.openapi        # OpenAPI 3.0 specification
+GET /api/docs.postman        # Postman collection
 ```
+
+**Note**: These endpoints are only available when `APP_DEBUG=true`.
 
 ### Account Management
 ```bash
@@ -238,8 +252,15 @@ ADMIN_USERNAME=admin@example.com
 5. Commit with descriptive message
 6. Create pull request
 
+## Architecture and Best Practices
+
+For comprehensive development guidelines, architecture details, and best practices, refer to:
+- [IMPLEMENTATION_PROTOCOL.md](IMPLEMENTATION_PROTOCOL.md) - Complete development protocol
+
 ## Additional Resources
 
 - [Laravel Documentation](https://laravel.com/docs)
 - [MongoDB PHP Library](https://www.mongodb.com/docs/php-library/current/)
 - [Keycloak Documentation](https://www.keycloak.org/documentation)
+- [Scribe API Documentation](https://scribe.knuckles.wtf/laravel)
+- [OpenAPI Specification](https://swagger.io/specification/)

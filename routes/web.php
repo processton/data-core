@@ -1,28 +1,16 @@
 <?php
 
+use App\Http\Controllers\Soap\SoapServerController;
 use Illuminate\Support\Facades\Route;
 
-// API Documentation and Playground (Development Mode Only)
-if (config('app.debug')) {
-    Route::get('/api/docs', function () {
-        return response()->json([
-            'message' => 'API Documentation',
-            'version' => '1.0.0',
-            'endpoints' => [
-                '/api/accounts' => 'Account management',
-                '/api/entities' => 'Entity management',
-                '/api/roles' => 'Role management',
-                '/api/permissions' => 'Permission management',
-            ],
-        ]);
-    });
+// SOAP Service Endpoint
+Route::any('/soap', [SoapServerController::class, 'handle']);
 
+// API Playground (Development Mode Only)
+if (config('app.debug')) {
     Route::get('/api/playground', function () {
-        return response()->json([
-            'message' => 'API Playground - Swagger UI will be mounted here',
-            'note' => 'This endpoint is only available in development mode',
-        ]);
-    });
+        return view('playground.index');
+    })->middleware('scribe.dev');
 }
 
 Route::fallback(function () {
