@@ -1,6 +1,74 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/laravel/compare/v12.7.1...12.x)
+## [Unreleased] - 2025-10-20
+
+### Added
+- **API Documentation System**: Integrated Scribe for comprehensive API documentation
+  - Interactive documentation at `/api/docs` (dev mode only)
+  - Examples in Bash, JavaScript, PHP, and Python
+  - OpenAPI 3.0 specification at `/api/docs.openapi`
+  - Postman collection at `/api/docs.postman`
+
+- **API Playground**: Interactive Swagger UI for testing endpoints
+  - Available at `/api/playground` (dev mode only)
+  - Real-time API testing with generated OpenAPI spec
+  - Token generation instructions included
+
+- **Actions Architecture**: Unified business logic layer
+  - 10 Laravel Actions for Account and Entity management
+  - Single source of truth for REST and SOAP APIs
+  - Dependency injection in REST controllers
+  - Eliminated code duplication between protocols
+
+- **Entity Loading System**: Dynamic entity management
+  - `EntityLoader` service for loading entities from PHP files
+  - `entity:load` Artisan command for one-command setup
+  - Automatic schema synchronization (MySQL + MongoDB)
+  - Entity fields with validation rules
+  - MongoDB index creation
+  - Auto-generated API endpoint documentation
+
+- **Countries Entity Example**: Complete real-world entity
+  - 14 fields including ISO codes, geographic data, currencies, languages
+  - Comprehensive JSON schema validation
+  - Optimized MongoDB indexes
+  - Ready-to-use configuration file at `entities/countries.php`
+
+- **Development Protocol**: Comprehensive implementation guidelines
+  - `IMPLEMENTATION_PROTOCOL.md` (17KB documentation)
+  - Architecture overview with diagrams
+  - Step-by-step API development guide
+  - Testing, security, and deployment standards
+  - Git workflow and contribution guidelines
+
+- **DevOnly Middleware**: Restricts dev features to development mode
+  - Protects API docs and playground in production
+  - Returns 404 when `APP_DEBUG=false`
+
+### Changed
+- Refactored `AccountController` (REST) to use Actions
+- Refactored `EntityController` (REST) to use Actions
+- Refactored `AccountSoapController` to use Actions
+- Refactored `EntitySoapController` to use Actions
+- Updated README.md with new documentation links
+- Enhanced DEVELOPMENT.md with detailed commands and architecture reference
+
+### Documentation
+- Added comprehensive PHPDoc annotations to all API controllers
+- Created `entities/README.md` for entity configuration guide
+- Updated API_USAGE.md references
+- Added Scribe configuration with authentication examples
+
+### Security
+- CodeQL security scan passing (no vulnerabilities)
+- Input validation on all API endpoints
+- Type safety throughout codebase
+- DevOnly middleware for development features
+
+### Testing
+- All 20 tests passing (67 assertions)
+- Code style compliant (Laravel Pint/PSR-12)
+- Zero linting issues
 
 ## [v12.7.1](https://github.com/laravel/laravel/compare/v12.7.0...v12.7.1) - 2025-10-15
 
